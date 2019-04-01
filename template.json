@@ -3,34 +3,29 @@
 		"project_id": "",
 		"zone": "",
 		"purpose": "nginx",
-		"source_image": "debian-7-stretch-v20190326"
+		"image_family": "debian-9"
 	},
   "provisioners" : [
     {
-      "type": "shell",
-      "inline": ["sudo apt install nginx"]
-    },
-    {
       "type": "file",
       "source": "index.html",
-      "destination": "/usr/share/nginx/html"
+      "destination": "/tmp/index.html"
     },
     {
       "type": "file",
       "source": "hello.conf",
-      "destination": "/etc/nginx/sites-available"
+      "destination": "/tmp/hello.conf"
     },
     {
       "type" : "shell",
       "inline" : [
+        "sudo apt install -y nginx",
+        "sudo mv /tmp/index.html /usr/share/nginx/html/",
+        "sudo mv /tmp/hello.conf /etc/nginx/sites-available/",
         "sudo unlink /etc/nginx/sites-enabled/default",
         "sudo ln -s /etc/nginx/sites-available/hello.conf /etc/nginx/sites-enabled/default",
         "sudo systemctl restart nginx"
       ]
-    },
-    {
-      "type": "inspec",
-      "profile": "https://github.com/dev-sec/linux-baseline"
     }
   ],
   "builders": [
@@ -38,7 +33,7 @@
       "type": "googlecompute",
       "project_id": "{{user `project_id`}}",
     	"image_name": "{{user `purpose`}}-{{isotime | clean_image_name}}",
-      "source_image": "{{user `source_image`}}",
+      "source_image_family": "{{user `image_family`}}",
       "ssh_username": "packer",
       "zone": "{{user `zone`}}"
     }
