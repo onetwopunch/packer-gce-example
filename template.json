@@ -1,10 +1,10 @@
 {
-	"variables" : {
-		"project_id": "",
-		"zone": "",
-		"purpose": "nginx",
-		"image_family": "debian-9"
-	},
+  "variables" : {
+    "project_id": "",
+    "zone": "",
+    "purpose": "nginx",
+    "image_family": "debian-9"
+  },
   "provisioners" : [
     {
       "type": "file",
@@ -32,7 +32,7 @@
     {
       "type": "googlecompute",
       "project_id": "{{user `project_id`}}",
-    	"image_name": "{{user `purpose`}}-{{isotime | clean_image_name}}",
+      "image_name": "{{user `purpose`}}-{{isotime | clean_image_name}}",
       "source_image_family": "{{user `image_family`}}",
       "ssh_username": "packer",
       "zone": "{{user `zone`}}"
